@@ -1,75 +1,81 @@
 
 import java.io.File;
+import java.io.FilenameFilter;
 
-public class Xml2Text{
-	
-	public static void main( String[] args){
-	
-            
-        /*    XmlParser  xml1 = new XmlParser("C:\\Users\\zeki\\Desktop\\RTA dataset\\texts\\geschlechtundch01weingoog.txt");
-	    xml1.parseXmlFile("C:\\Users\\zeki\\Desktop\\RTA dataset\\texts\\geschlechtundch01weingoog_djvu.xml");
-            xml1 = new XmlParser("C:\\Users\\zeki\\Desktop\\RTA dataset\\texts\\dogmengeschicht01harngoog.txt");
-	    xml1.parseXmlFile("C:\\Users\\zeki\\Desktop\\RTA dataset\\texts\\dogmengeschicht01harngoog_djvu.xml");
-            xml1 = new XmlParser("C:\\Users\\zeki\\Desktop\\RTA dataset\\texts\\immanuelkantskr01kantgoog.txt");
-	    xml1.parseXmlFile("C:\\Users\\zeki\\Desktop\\RTA dataset\\texts\\immanuelkantskr01kantgoog_djvu.xml");
-            */
-            
-            String outputfile = null;
-            XmlParser xml = null;            
-            String inputfile = null;
-            String inputfoldername = null, outputFolder = null;
-            
-           //inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\duplicateDetection\\eng-ger";
-           //outputFolder = "datasets/eng-ger/378books";
-          // inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\duplicateDetection\\eng-fre";
-          // outputFolder = "datasets/eng-fre/444books";
-          // inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\duplicateDetection\\eng-lat";
-          // outputFolder = "datasets/eng-lat/233books_new";
+// MCZ 6/2013 - modifing to accept parameters: file_or_directory [output_directory]
+// You can pass in a single file to process or a whole directory. If you want the 
+// output to go someplace other than where the input is, specifiy a directory
+// as the 2nd parameter. 
+// If a single file is passed in, it must end with the "xml" file extension.
+public class Xml2Text {
 
-         //  inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\duplicateDetection\\eng-ger_freud";
-         //  outputFolder = "datasets/eng-ger/31books";
-         //   inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\duplicateDetection\\AlignmentData\\eng_ia_novels_xml";
-         //   outputFolder = "C:\\Users\\zeki\\Documents\\MATLAB\\duplicateDetection\\AlignmentData\\eng_ia_novels_txt";
+    public static void main(String[] args) {
 
-         //   inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\RecursiveAlignmentData\\dataset\\ia_texts\\xml\\ger";
-         //   outputFolder = "C:\\Users\\zeki\\Documents\\MATLAB\\RecursiveAlignmentData\\dataset\\ia_texts\\txt\\ger";
-          //   inputfoldername = "C:\\Users\\zeki\\Documents\\NetBeansProjects\\DuplicateDetector\\datasets\\eng-ger\\50K\\20query_books_english_with_match";
-           //  outputFolder = "C:\\Users\\zeki\\Documents\\\\NetBeansProjects\\DuplicateDetector\\datasets\\eng-ger\\50K\\20query_books_english_with_match\\text";
+        // make sure there's at leat 1 argument (either file or folder to process)
+        // if only 1 arg is given, we'll write the output to the same folder.
 
-             inputfoldername = "C:\\Users\\zeki\\Documents\\NetBeansProjects\\DuplicateDetector\\datasets\\eng-ger\\50K\\20query_books_english_with_match_fixed";
-             outputFolder = "C:\\Users\\zeki\\Documents\\\\NetBeansProjects\\DuplicateDetector\\datasets\\eng-ger\\50K\\20query_books_english_with_match_fixed\\text";
+        if (args.length == 0) {
+            System.out.println("Usage: Xml2Text <input path or file> [output path]");
+            System.exit(0);
+        }
 
+        String outputFolder = null;
+        if (args.length > 1) {
+            outputFolder = args[1];
+        }
 
-          //      inputfoldername = "C:\\Users\\zeki\\Documents\\NetBeansProjects\\DuplicateDetector\\datasets\\eng-ger\\50K\\absent_books_in_the_50K_dataset";
-         //    outputFolder = "C:\\Users\\zeki\\Documents\\\\NetBeansProjects\\DuplicateDetector\\datasets\\eng-ger\\50K\\absent_books_in_the_50K_dataset\\text";
+        File[] files = null;
+        String outputExtension = ".txt";
 
-           // inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\RecursiveAlignmentData\\dataset\\ia_texts\\xml\\spa";
-        //    outputFolder = "C:\\Users\\zeki\\Documents\\MATLAB\\RecursiveAlignmentData\\dataset\\ia_texts\\txt\\spa";
+        // determine if we're processing a single file or a folder
+        if (args[0].toLowerCase().endsWith(".xml")) {
+            // processing ONE file
+            files = new File[1];
+            files[0] = new File(args[0]);
+        } else {
+            // we were passed in a path
+            File folder = new File(args[0]);
+            // get all the XML files in that folder
+            files = folder.listFiles(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.toLowerCase().endsWith(".xml");
+                }
+            });
+            if (files == null) {
+                System.out.println("No files found in path: " + args[0]);
+                System.exit(0);
+            }
+        }
 
-       //     inputfoldername = "C:\\Users\\zeki\\Documents\\MATLAB\\RecursiveAlignmentData\\dataset\\ia_texts\\xml\\fre";
-       //     outputFolder = "C:\\Users\\zeki\\Documents\\MATLAB\\RecursiveAlignmentData\\dataset\\ia_texts\\txt\\fre";
+        for (int i = 0; i < files.length; i++) {
+            String inputFile = files[i].getAbsolutePath();
+            if (new File(inputFile).isDirectory()) {
+                continue;
+            }
 
-            String outputExtension = ".txt";
+            // get the name of the output file
+            String tmpFileName = files[i].getName();
+            String outFileName = tmpFileName.substring(0, tmpFileName.length() - 4) + outputExtension;
 
-            File out = new File(outputFolder);
-            if (!out.exists()) { out.mkdirs();}    // create the folder if it does not exists
-            
-            // for each file in the folder
-            File folder = new File(inputfoldername);
-            File [] files = folder.listFiles();
-            for ( int i = 0; i < files.length; i++){
+            String outputFileAndPath = null;
 
-                inputfile = files[i].getAbsolutePath();
-                if ( new File( inputfile).isDirectory() ){continue;}
+            // if no output path was specified on the command line put them
+            // in the same folder
+            if (outputFolder == null) {
+                outputFileAndPath = files[i].getPath().substring(0, files[i].getPath().lastIndexOf(File.separator) + 1) + outFileName;
+            } else {
+                File out = new File(outputFolder);
+                if (!out.exists()) {
+                    out.mkdirs();// create the folder if it does not exists
+                }
+                outputFileAndPath = outputFolder + File.separator + outFileName;
+            }
 
-                outputfile = outputFolder + "\\" + inputfile.substring(inputfile.lastIndexOf('\\')+1, inputfile.lastIndexOf('.')) + outputExtension;
-                System.out.println(outputfile);
+            XmlParser xml = new XmlParser(outputFileAndPath);
+            xml.parseXmlFile(inputFile);
 
-                xml = new XmlParser(outputfile);
-		xml.parseXmlFile(inputfile);
+            // TODO: here extract unique words of the file too along with .tra file.
 
-                // TODO: here extract unique words of the file too along with .tra file.
-                
-            }				
-	}
+        }
+    }
 }
