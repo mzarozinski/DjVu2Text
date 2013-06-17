@@ -42,7 +42,7 @@ public class Xml2Text {
                 }
             });
             if (files == null) {
-                System.out.println("No files found in path: " + args[0]);
+                System.err.println("No files found in path: " + args[0]);
                 System.exit(0);
             }
         }
