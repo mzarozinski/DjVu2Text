@@ -65,7 +65,7 @@ public class XmlParser extends DefaultHandler {
 
 
         } catch (Exception e) {
-
+            System.err.println("Error processing file: " + fileName);
             e.printStackTrace();
         }
 
@@ -82,7 +82,7 @@ public class XmlParser extends DefaultHandler {
 
 
         } catch (Exception e) {
-            System.out.println("Error processing file: " + fileName);
+            System.err.println("Error processing file: " + fileName);
             e.printStackTrace();
         }
 
