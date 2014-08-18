@@ -2,16 +2,16 @@
 import java.io.File;
 import java.io.FilenameFilter;
 
-// MCZ 6/2013 - modifing to accept parameters: file_or_directory [output_directory]
+// MCZ 6/2013 - modifying to accept parameters: file_or_directory [output_directory]
 // You can pass in a single file to process or a whole directory. If you want the 
-// output to go someplace other than where the input is, specifiy a directory
+// output to go some place other than where the input is, specify a directory
 // as the 2nd parameter. 
 // If a single file is passed in, it must end with the "xml" file extension.
 public class Xml2Text {
 
     public static void main(String[] args) {
 
-        // make sure there's at leat 1 argument (either file or folder to process)
+        // make sure there's at least 1 argument (either file or folder to process)
         // if only 1 arg is given, we'll write the output to the same folder.
 
         if (args.length == 0) {
@@ -73,8 +73,6 @@ public class Xml2Text {
 
             XmlParser xml = new XmlParser(outputFileAndPath);
             xml.parseXmlFile(inputFile);
-
-            // TODO: here extract unique words of the file too along with .tra file.
 
         }
     }

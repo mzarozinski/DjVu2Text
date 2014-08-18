@@ -8,11 +8,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.FileInputStream;
 
-//public class XmlParser extends HandlerBase{
 public class XmlParser extends DefaultHandler {
 
-    private SAXParserFactory factory;// = SAXParserFactory.newInstance();
-    private SAXParser saxParser;// = factory.newSAXParser();
+    private SAXParserFactory factory; 
+    private SAXParser saxParser; 
     int count = 0;
     boolean paragraph = false;
     boolean pageColumn = false;
@@ -59,7 +58,6 @@ public class XmlParser extends DefaultHandler {
 
         try {
 
-            //saxParser.parse( new File( fileName), this);
             InputStream inputStream = new FileInputStream(new File(fileName));
             saxParser.parse(inputStream, this);
 
@@ -74,8 +72,6 @@ public class XmlParser extends DefaultHandler {
     public void parseXmlFile(String fileName, String outFile) {
 
         try {
-
-            //saxParser.parse( new File( fileName), this);
 
             InputStream inputStream = new FileInputStream(new File(fileName));
             saxParser.parse(inputStream, this);
@@ -108,29 +104,7 @@ public class XmlParser extends DefaultHandler {
             e.printStackTrace();
         }
     }
-
-    public void dumpToFile(String outFile, String title_file) {
-
-        try {
-            /*
-             BufferedWriter bw = new BufferedWriter( new OutputStreamWriter( new FileOutputStream( outFile), "UTF8"));
-             BufferedWriter bw_title = new BufferedWriter( new FileWriter( new File( title_file), true));
-    		
-             bw.write( text_str);
-             bw.flush();
-             bw.close();
-    		
-             bw_title.write( outFile+"\t"+title_str+"\t"+author_str);
-             bw_title.newLine();
-             bw_title.flush();
-             bw_title.close();
-             */
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-    }
-
+ 
     public void dumpToFile(String str) {
 
         try {
@@ -139,7 +113,6 @@ public class XmlParser extends DefaultHandler {
             bw.newLine();
             bw.flush();
 
-
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -147,8 +120,7 @@ public class XmlParser extends DefaultHandler {
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
-
-
+ 
         if (qName.equals("LINE")) {
             paragraph = true;
         }
@@ -172,8 +144,7 @@ public class XmlParser extends DefaultHandler {
             } else {
                 lines += paragraph_str.trim() + "\n";
             }
-
-            //dumpToFile( paragraph_str.trim());				
+ 			
             paragraph_str = "";
 
         }
@@ -198,6 +169,8 @@ public class XmlParser extends DefaultHandler {
                 String st = s.trim();
                 if (st.length() > 0) {
 
+					// some books have 5 pages of a "google preamble" which we
+					// don't want to include.
                     if (st.equalsIgnoreCase("google")) {
                         isGoogle = true;
                     }
