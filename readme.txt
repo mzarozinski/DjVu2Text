@@ -17,7 +17,7 @@ info@ciir.cs.umass.edu.
 
 HOW TO COMPILE:
 ===============
-Inside the source folder, type the following command to compile the code (tested for Java version 1.6):
+Inside the source folder, type the following command to compile the code (tested for Java version 1.7):
 "javac *.java"
 
 HOW TO USE THE TOOL
@@ -25,11 +25,11 @@ HOW TO USE THE TOOL
 
 1 - COMMAND LINE INTERFACE:
 ---------------------------
-USAGE: DjVu2Text <inputFileORfolderName> <outputFolder>
+USAGE: java -cp . Xml2Text <inputFileORfolderName> <outputFolder>
 
 PARAMETERS:
 <inputFileORfolderName>
-	full path for input xml file or folder name. If the input filename is a folder, all the files in the folder are processed.
+	full path for input xml file or folder name. If the input file name is a folder, all the files in the folder are processed.
 <outputFolder>
-	[OPTIONAL] if specified, this is where the output is written.
+	[OPTIONAL] if specified, this is where the output is written. Without this, the output is written in the same folder as the DjVu XML files.
  
