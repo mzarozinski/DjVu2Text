@@ -12,8 +12,7 @@ This tool converts DjVu xml files to text.
  
 CONTACT INFORMATION
 ================================
-For further information please contact either 
-info@ciir.cs.umass.edu. 
+For further information please contact info@ciir.cs.umass.edu. 
 
 HOW TO COMPILE:
 ===============
