@@ -24,11 +24,11 @@ HOW TO USE THE TOOL
 
 1 - COMMAND LINE INTERFACE:
 ---------------------------
-USAGE: java -cp . Xml2Text <inputFileORfolderName> <outputFolder>
+USAGE: DjVu2Text [-i<input path>] [-h] [-o<output path>] [-s]
+        -i      Optional. Path of file(s) to process. This can be a single XML file or a directory. If this is not specified input is read from stdin. If using stdin, the output file must be specified with the '-o' parameter.
+        -h      Optional. Display this help message.
+        -o      Optional. Where to write the output. If this is not specified the output is written to the same folder as the input.
+        -s      Optional. If specified, non-alpha characters are stripped out.
 
-PARAMETERS:
-<inputFileORfolderName>
-	full path for input xml file or folder name. If the input file name is a folder, all the files in the folder are processed.
-<outputFolder>
-	[OPTIONAL] if specified, this is where the output is written. Without this, the output is written in the same folder as the DjVu XML files.
+ 
  
